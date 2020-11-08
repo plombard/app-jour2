@@ -6,6 +6,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.logging.Logger;
 
 @Path("/hello")
@@ -18,9 +20,11 @@ public class ExampleResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@QueryParam("param") String param) {
-        String prenom = param.split(",")[0];
-        LOG.infov("Passage dans Hello [{0}]", param);
+    /* FIX 001 : L'application propose une véritable API : documentation et paramètres typés. */
+    @Operation(description = "Retourne un bonjour avec le prenom passé en paramètre")
+    public String hello(@Parameter(description = "Nom de la personne", required = true) @QueryParam("nom") String nom,
+            @Parameter(description = "Prénom de la personne", required = true) @QueryParam("prenom") String prenom) {
+        LOG.infov("Passage dans Hello [{0}]", nom);
         return message + " " + prenom + "\n";
     }
 }
