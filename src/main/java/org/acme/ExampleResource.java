@@ -15,7 +15,7 @@ public class ExampleResource {
 
     private static final Logger LOG = Logger.getLogger(ExampleResource.class);
 
-    @ConfigProperty(name = "greeting.message", defaultValue = "hello")
+    @ConfigProperty(name = "greeting.message")
     String message;
 
     @GET
@@ -25,6 +25,11 @@ public class ExampleResource {
     public String hello(@Parameter(description = "Nom de la personne", required = true) @QueryParam("nom") String nom,
             @Parameter(description = "Prénom de la personne", required = true) @QueryParam("prenom") String prenom) {
         LOG.infov("Passage dans Hello [{0}]", nom);
-        return message + " " + prenom + "\n";
+        if (prenom != null) {
+            return message + " " + prenom + "\n";
+        } else {
+            return message + "\n";
+        }
+        
     }
 }
